@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Football</string>
+
+    <string name="team_logo_image_description">Team logo</string>
 </resources>
