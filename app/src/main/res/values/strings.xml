@@ -2,4 +2,11 @@
     <string name="app_name">Football</string>
 
     <string name="team_logo_image_description">Team logo</string>
+    <string name="founding_year">Founding: %1$d</string>
+
+    <string name="stadium_title">Stadium</string>
+    <string name="stadium_address">Address: %1$s</string>
+    <string name="stadium_city">City: %1$s</string>
+    <string name="stadium_capacity">Capacity: %1$d</string>
+
 </resources>
