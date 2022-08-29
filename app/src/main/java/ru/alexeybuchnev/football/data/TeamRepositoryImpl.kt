@@ -3,6 +3,7 @@ package ru.alexeybuchnev.football.data
 import ru.alexeybuchnev.football.model.Player
 import ru.alexeybuchnev.football.model.Team
 import ru.alexeybuchnev.football.model.Venue
+import java.lang.IllegalArgumentException
 
 class TeamRepositoryImpl : TeamRepository {
 
@@ -143,5 +144,19 @@ class TeamRepositoryImpl : TeamRepository {
             players = it.players
         }
         return players
+    }
+
+    companion object {
+        private var instance: TeamRepository? = null
+
+        fun initialize() {
+            if (instance == null) {
+                instance = TeamRepositoryImpl()
+            }
+        }
+
+        fun get() : TeamRepository {
+            return instance ?: throw IllegalArgumentException("TeamRepository must be initialized")
+        }
     }
 }
