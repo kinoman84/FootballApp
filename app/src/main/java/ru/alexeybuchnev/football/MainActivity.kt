@@ -2,12 +2,14 @@ package ru.alexeybuchnev.football
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import ru.alexeybuchnev.football.presentation.palyerslist.PlayersListFragment
 import ru.alexeybuchnev.football.presentation.teamdetails.TeamDetailsFragment
 import ru.alexeybuchnev.football.presentation.teams.TeamsListFragment
 
 class MainActivity :
     AppCompatActivity(),
-    TeamsListFragment.TeamListItemClickListener {
+    TeamsListFragment.TeamListItemClickListener,
+    TeamDetailsFragment.PlayerButtonCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -40,7 +42,22 @@ class MainActivity :
             .commit()
     }
 
+    private fun routeToPlayersList(teamId: Int) {
+        supportFragmentManager.beginTransaction()
+            .add(
+                R.id.fragment_container,
+                PlayersListFragment.newInstance(teamId),
+                PlayersListFragment::class.java.simpleName
+            )
+            .addToBackStack("trans:${PlayersListFragment::class.java.simpleName}")
+            .commit()
+    }
+
     override fun onTeamSelected(teamId: Int) {
         routeToTeamDetails(teamId)
+    }
+
+    override fun routeToPlayerList(teamId: Int) {
+        routeToPlayersList(teamId)
     }
 }

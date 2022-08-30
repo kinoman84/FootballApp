@@ -11,14 +11,15 @@ class TeamsListAdapter(private val onTeamClick: (teamId: Int) -> Unit) :
     RecyclerView.Adapter<TeamsListItemViewHolder>() {
     private var teamList: List<Team> = listOf()
 
-    fun setList(list : List<Team>) {
+    fun setList(list: List<Team>) {
         teamList = list
         notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TeamsListItemViewHolder {
         val view: View =
-            LayoutInflater.from(parent.context).inflate(R.layout.teams_list_item, parent, false)
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.viewholder_teams_list, parent, false)
         return TeamsListItemViewHolder(view)
     }
 

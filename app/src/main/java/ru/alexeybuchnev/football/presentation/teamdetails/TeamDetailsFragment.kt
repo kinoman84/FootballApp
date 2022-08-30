@@ -1,8 +1,11 @@
 package ru.alexeybuchnev.football.presentation.teamdetails
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import ru.alexeybuchnev.football.R
 import ru.alexeybuchnev.football.data.TeamRepositoryImpl
@@ -11,6 +14,15 @@ import ru.alexeybuchnev.football.model.Team
 class TeamDetailsFragment : Fragment(R.layout.fragment_team_details) {
 
     private var selectedTeamId: Int? = null
+    private var playerButtonCallback: PlayerButtonCallback? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        if (context is PlayerButtonCallback) {
+            playerButtonCallback = context
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,8 +65,15 @@ class TeamDetailsFragment : Fragment(R.layout.fragment_team_details) {
             requireContext().resources.getString(R.string.stadium_capacity),
             team.venue.capacity
         )
+
+        view.findViewById<Button>(R.id.route_to_players_list_button)?.setOnClickListener {
+            playerButtonCallback?.routeToPlayerList(team.id)
+        }
     }
 
+    interface PlayerButtonCallback {
+        fun routeToPlayerList(teamId: Int)
+    }
 
     companion object {
 
