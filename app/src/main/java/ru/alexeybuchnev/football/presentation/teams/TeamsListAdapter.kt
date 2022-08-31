@@ -7,27 +7,28 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.alexeybuchnev.football.R
 import ru.alexeybuchnev.football.model.Team
 
-class TeamsListAdapter : RecyclerView.Adapter<TeamsListItemViewHolder>() {
+class TeamsListAdapter(private val onTeamClick: (teamId: Int) -> Unit) :
+    RecyclerView.Adapter<TeamsListItemViewHolder>() {
     private var teamList: List<Team> = listOf()
 
-    fun setList(list : List<Team>) {
+    fun setList(list: List<Team>) {
         teamList = list
         notifyDataSetChanged()
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TeamsListItemViewHolder {
         val view: View =
-            LayoutInflater.from(parent.context).inflate(R.layout.teams_list_item, parent, false)
+            LayoutInflater.from(parent.context)
+                .inflate(R.layout.viewholder_teams_list, parent, false)
         return TeamsListItemViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: TeamsListItemViewHolder, position: Int) {
-        holder.bind(teamList[position])
+        holder.bind(teamList[position], onTeamClick)
     }
 
     override fun getItemCount(): Int {
         return teamList.size
     }
-
 
 }

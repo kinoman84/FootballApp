@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/player_photo_image_view"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_margin="@dimen/margin_space_1x"
+        android:contentDescription="@string/player_photo_image_description"
+        android:src="@drawable/ic_baseline_face_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/player_name_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="A. Miranchuk"
+        app:layout_constraintStart_toEndOf="@id/player_photo_image_view"
+        app:layout_constraintTop_toTopOf="@id/player_photo_image_view"
+        android:layout_marginStart="@dimen/margin_space_2x"
+        android:textSize="@dimen/text_size_body_1x"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/player_number_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Number: 1"
+        app:layout_constraintStart_toEndOf="@id/player_photo_image_view"
+        app:layout_constraintTop_toBottomOf="@id/player_name_text_view"
+        android:layout_marginStart="@dimen/margin_space_2x"
+        android:textSize="@dimen/text_size_body_1x"
+        android:layout_marginTop="@dimen/margin_space_2x" />
+
+    <TextView
+        android:id="@+id/player_position_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:text="Position: Midfielder"
+        app:layout_constraintStart_toEndOf="@id/player_photo_image_view"
+        app:layout_constraintTop_toBottomOf="@id/player_number_text_view"
+        android:layout_marginStart="@dimen/margin_space_2x"
+        android:textSize="@dimen/text_size_body_1x"
+        android:layout_marginTop="@dimen/margin_space_2x" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

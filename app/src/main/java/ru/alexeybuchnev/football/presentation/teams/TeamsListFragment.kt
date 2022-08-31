@@ -1,5 +1,6 @@
 package ru.alexeybuchnev.football.presentation.teams
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
@@ -15,11 +16,24 @@ class TeamsListFragment : Fragment(R.layout.fragment_teams_list) {
     private lateinit var teamsRecyclerView: RecyclerView
     private lateinit var teamsViewModel: TeamListViewModel
 
+    private var teamClickListener: TeamListItemClickListener? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        if (context is TeamListItemClickListener) {
+            teamClickListener = context
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         teamsRecyclerView = view.findViewById(R.id.teams_list_recycler_View)
         teamsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        teamsRecyclerView.adapter = TeamsListAdapter()
+        //TODO ещё раз про лямбды почитать
+        teamsRecyclerView.adapter = TeamsListAdapter {
+            teamId -> teamClickListener?.onTeamSelected(teamId)
+        }
 
         teamsViewModel = ViewModelProvider(this)[TeamListViewModel::class.java]
 
@@ -33,5 +47,13 @@ class TeamsListFragment : Fragment(R.layout.fragment_teams_list) {
 
     private fun updateUi(teams: List<Team>) {
         (teamsRecyclerView.adapter as TeamsListAdapter).setList(teams)
+    }
+
+    interface TeamListItemClickListener {
+        fun onTeamSelected(teamId: Int)
+    }
+
+    companion object {
+        fun newInstance() = TeamsListFragment()
     }
 }
