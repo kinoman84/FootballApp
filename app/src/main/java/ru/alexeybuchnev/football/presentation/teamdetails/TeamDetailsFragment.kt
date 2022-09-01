@@ -4,9 +4,11 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import coil.load
 import ru.alexeybuchnev.football.R
 import ru.alexeybuchnev.football.data.TeamRepositoryImpl
 import ru.alexeybuchnev.football.model.Team
@@ -69,6 +71,22 @@ class TeamDetailsFragment : Fragment(R.layout.fragment_team_details) {
         view.findViewById<Button>(R.id.route_to_players_list_button)?.setOnClickListener {
             playerButtonCallback?.routeToPlayerList(team.id)
         }
+
+        view.findViewById<ImageView>(R.id.team_logo_image_view)?.load(team.logoUrl) {
+            placeholder(R.drawable.ic_baseline_sports_soccer_24)
+            error(R.drawable.ic_baseline_sports_soccer_24)
+        }
+
+        view.findViewById<ImageView>(R.id.stadium_photo_image_view)?.load(team.venue.imageUrl) {
+            placeholder(R.drawable.ic_baseline_stadium_24)
+            error(R.drawable.ic_baseline_stadium_24)
+        }
+    }
+
+    override fun onDetach() {
+        playerButtonCallback = null
+
+        super.onDetach()
     }
 
     interface PlayerButtonCallback {

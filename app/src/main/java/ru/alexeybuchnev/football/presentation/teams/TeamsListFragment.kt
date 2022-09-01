@@ -45,6 +45,12 @@ class TeamsListFragment : Fragment(R.layout.fragment_teams_list) {
 
     }
 
+    override fun onDetach() {
+        teamClickListener = null
+
+        super.onDetach()
+    }
+
     private fun updateUi(teams: List<Team>) {
         (teamsRecyclerView.adapter as TeamsListAdapter).setList(teams)
     }
