@@ -5,9 +5,14 @@ import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import ru.alexeybuchnev.football.R
 import ru.alexeybuchnev.football.data.TeamRepositoryImpl
+import ru.alexeybuchnev.football.data.TeamRepositoryMockupImpl
 import ru.alexeybuchnev.football.model.Player
+import java.lang.IllegalArgumentException
 
 class PlayersListFragment : Fragment(R.layout.fragment_players_list) {
 
@@ -33,7 +38,9 @@ class PlayersListFragment : Fragment(R.layout.fragment_players_list) {
 
         val teamRepository = TeamRepositoryImpl.get()
 
-        val players = teamRepository.getPlayers(selectedTeamId ?: return)
+        val players = runBlocking {
+            teamRepository.getPlayers(selectedTeamId ?: throw IllegalArgumentException())
+        }
 
         updateUi(players)
     }

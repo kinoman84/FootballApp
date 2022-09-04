@@ -1,0 +1,145 @@
+package ru.alexeybuchnev.football.data.network.retrofit
+
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.create
+import ru.alexeybuchnev.football.data.network.NetworkDataSource
+import ru.alexeybuchnev.football.model.Player
+import ru.alexeybuchnev.football.model.Team
+import ru.alexeybuchnev.football.model.Venue
+import java.lang.Exception
+import java.util.NoSuchElementException
+import java.util.concurrent.TimeUnit
+
+class RetrofitDataSource : NetworkDataSource {
+
+    private val headers = mapOf(
+        "x-rapidapi-key" to "f7004386ac3802c6c8a81d52ab505ae8",
+        "x-rapidapi-host" to "v3.football.api-sports.io")
+    private val country = "Russia"
+    private val season = 2022
+    private val league = 235
+
+    private var teamCash: List<Team> = emptyList()
+
+    override suspend fun getTeams(): List<Team> {
+        if (teamCash.isEmpty()) {
+            teamCash = teamCash.plus(loadTeamsList())
+        }
+
+        return teamCash
+    }
+
+    override suspend fun getTeam(teamId: Int): Team {
+        if (teamCash.isEmpty()) {
+            teamCash = teamCash.plus(loadTeamsList())
+        }
+
+        return teamCash.find { it.id == teamId } ?: throw NoSuchElementException()
+    }
+
+    override suspend fun getPlayers(teamId: Int): List<Player> {
+        val response = RetrofitModule.api.getPlayers(headers, teamId)
+
+        val players = response.response.first().players.map {
+            Player(
+                id = it.id,
+                name = it.name,
+                age = it.age,
+                number = it.number,
+                position = it.position,
+                photoUrl = it.photoUrl
+            )
+        }
+
+        return players
+    }
+
+    private suspend fun loadTeamsList(): List<Team> {
+
+
+        val response = RetrofitModule.api.getTeams(
+            headers,
+            country,
+            season,
+            league
+        )
+
+        val teams = response.teams.map {
+            Team(
+                id = it.teamData.id,
+                name = it.teamData.name,
+                //TODO реализовать обработку незаполненых полей
+                founded = it.teamData.founded ?: 0,
+                logoUrl = it.teamData.logoUrl,
+                venue = Venue(
+                    id = it.venueData.id,
+                    name = it.venueData.name,
+                    address = it.venueData.address,
+                    city = it.venueData.city,
+                    capacity = it.venueData.capacity,
+                    imageUrl = it.venueData.imageUrl
+                ),
+                //TODO реализовать
+                players = listOf(
+                    Player(
+                        id = 464,
+                        name = "Guilherme",
+                        age = 37,
+                        number = 1,
+                        position = "Goalkeeper",
+                        photoUrl = "https://media.api-sports.io/football/players/464.png"
+                    ),
+                    Player(
+                        id = 476,
+                        name = "D. Barinov",
+                        age = 26,
+                        number = 6,
+                        position = "Midfielder",
+                        photoUrl = "https://media.api-sports.io/football/players/476.png"
+                    ),
+                    Player(
+                        id = 485,
+                        name = "A. Miranchuk",
+                        age = 27,
+                        number = 11,
+                        position = "Midfielder",
+                        photoUrl = "https://media.api-sports.io/football/players/485.png"
+                    )
+                )
+            )
+        }
+
+        return teams
+    }
+
+
+}
+
+private object RetrofitModule {
+
+    private val json = Json {
+        ignoreUnknownKeys = true
+        prettyPrint = true
+    }
+
+    private val client: OkHttpClient = OkHttpClient()
+        .newBuilder()
+        .connectTimeout(10, TimeUnit.SECONDS)
+        .writeTimeout(30, TimeUnit.SECONDS)
+        .readTimeout(30, TimeUnit.SECONDS)
+        .build()
+
+    private const val baseUrl = "https://v3.football.api-sports.io/"
+
+    private val retrofit: Retrofit = Retrofit.Builder()
+        .client(client)
+        .baseUrl(baseUrl)
+        .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+        .build()
+
+    val api: FootballApiService = retrofit.create()
+}

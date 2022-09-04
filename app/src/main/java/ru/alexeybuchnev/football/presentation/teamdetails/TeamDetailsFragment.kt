@@ -6,12 +6,14 @@ import android.view.View
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import coil.load
+import kotlinx.coroutines.runBlocking
 import ru.alexeybuchnev.football.R
 import ru.alexeybuchnev.football.data.TeamRepositoryImpl
+import ru.alexeybuchnev.football.data.TeamRepositoryMockupImpl
 import ru.alexeybuchnev.football.model.Team
+import java.lang.IllegalArgumentException
 
 class TeamDetailsFragment : Fragment(R.layout.fragment_team_details) {
 
@@ -38,7 +40,9 @@ class TeamDetailsFragment : Fragment(R.layout.fragment_team_details) {
 
         val teamRepository = TeamRepositoryImpl.get()
 
-        val team = teamRepository.getTeam(selectedTeamId ?: return)
+        val team = runBlocking {
+            teamRepository.getTeam(selectedTeamId ?: throw IllegalArgumentException())
+        }
 
         updateUi(team, view)
     }
