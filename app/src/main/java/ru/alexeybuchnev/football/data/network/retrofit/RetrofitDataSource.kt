@@ -49,7 +49,8 @@ class RetrofitDataSource : NetworkDataSource {
                 id = it.id,
                 name = it.name,
                 age = it.age,
-                number = it.number,
+                //TODO обработать необязательные поля
+                number = it.number ?: 0,
                 position = it.position,
                 photoUrl = it.photoUrl
             )
@@ -83,33 +84,8 @@ class RetrofitDataSource : NetworkDataSource {
                     capacity = it.venueData.capacity,
                     imageUrl = it.venueData.imageUrl
                 ),
-                //TODO реализовать
-                players = listOf(
-                    Player(
-                        id = 464,
-                        name = "Guilherme",
-                        age = 37,
-                        number = 1,
-                        position = "Goalkeeper",
-                        photoUrl = "https://media.api-sports.io/football/players/464.png"
-                    ),
-                    Player(
-                        id = 476,
-                        name = "D. Barinov",
-                        age = 26,
-                        number = 6,
-                        position = "Midfielder",
-                        photoUrl = "https://media.api-sports.io/football/players/476.png"
-                    ),
-                    Player(
-                        id = 485,
-                        name = "A. Miranchuk",
-                        age = 27,
-                        number = 11,
-                        position = "Midfielder",
-                        photoUrl = "https://media.api-sports.io/football/players/485.png"
-                    )
-                )
+                //TODO убрать сисок игроков из команды
+                players = emptyList()
             )
         }
 

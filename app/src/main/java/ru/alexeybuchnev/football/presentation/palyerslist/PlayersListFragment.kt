@@ -3,20 +3,16 @@ package ru.alexeybuchnev.football.presentation.palyerslist
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
 import ru.alexeybuchnev.football.R
-import ru.alexeybuchnev.football.data.TeamRepositoryImpl
-import ru.alexeybuchnev.football.data.TeamRepositoryMockupImpl
 import ru.alexeybuchnev.football.model.Player
-import java.lang.IllegalArgumentException
 
 class PlayersListFragment : Fragment(R.layout.fragment_players_list) {
 
     private lateinit var playersRecyclerView: RecyclerView
+    private lateinit var playerViewModel: PlayersListViewModel
 
     private var selectedTeamId: Int? = null
 
@@ -36,13 +32,15 @@ class PlayersListFragment : Fragment(R.layout.fragment_players_list) {
 
         playersRecyclerView.adapter = PlayersListAdapter()
 
-        val teamRepository = TeamRepositoryImpl.get()
+        playerViewModel = ViewModelProvider(this)[PlayersListViewModel::class.java]
 
-        val players = runBlocking {
-            teamRepository.getPlayers(selectedTeamId ?: throw IllegalArgumentException())
+        playerViewModel.playersListLiveData.observe(this.viewLifecycleOwner) {
+            updateUi(players = it)
         }
 
-        updateUi(players)
+        selectedTeamId?.let {
+            playerViewModel.loadPlayers(it)
+        }
     }
 
     private fun updateUi(players: List<Player>) {

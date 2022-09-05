@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import coil.load
 import kotlinx.coroutines.runBlocking
 import ru.alexeybuchnev.football.R
@@ -19,6 +20,7 @@ class TeamDetailsFragment : Fragment(R.layout.fragment_team_details) {
 
     private var selectedTeamId: Int? = null
     private var playerButtonCallback: PlayerButtonCallback? = null
+    private lateinit var teamDetailsViewModel: TeamDetailsViewModel
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -38,13 +40,15 @@ class TeamDetailsFragment : Fragment(R.layout.fragment_team_details) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val teamRepository = TeamRepositoryImpl.get()
+        teamDetailsViewModel = ViewModelProvider(this) [TeamDetailsViewModel::class.java]
 
-        val team = runBlocking {
-            teamRepository.getTeam(selectedTeamId ?: throw IllegalArgumentException())
+        teamDetailsViewModel.teamDetailsLiveData.observe(this.viewLifecycleOwner) {
+            updateUi(it, view)
         }
 
-        updateUi(team, view)
+        selectedTeamId?.let {
+            teamDetailsViewModel.loadTeamDetails(it)
+        }
     }
 
     private fun updateUi(team: Team, view: View) {

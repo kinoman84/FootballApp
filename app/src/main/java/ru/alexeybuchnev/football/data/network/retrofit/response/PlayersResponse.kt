@@ -18,7 +18,7 @@ data class PlayerResponseData(
     @SerialName("id") val id: Int,
     @SerialName("name") val name: String,
     @SerialName("age") val age: Int,
-    @SerialName("number") val number: Int,
+    @SerialName("number") val number: Int? = null,
     @SerialName("position") val position: String,
     @SerialName("photo") val photoUrl: String
 )

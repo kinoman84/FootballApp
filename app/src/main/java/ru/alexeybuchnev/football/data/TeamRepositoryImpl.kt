@@ -6,7 +6,7 @@ import ru.alexeybuchnev.football.model.Player
 import ru.alexeybuchnev.football.model.Team
 import java.lang.IllegalArgumentException
 
-class TeamRepositoryImpl: TeamRepository {
+class TeamRepositoryImpl private constructor() : TeamRepository {
 
     private val remoteData: NetworkDataSource  = RetrofitDataSource()
 

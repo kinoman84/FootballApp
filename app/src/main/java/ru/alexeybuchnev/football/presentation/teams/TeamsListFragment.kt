@@ -36,7 +36,7 @@ class TeamsListFragment : Fragment(R.layout.fragment_teams_list) {
 
         teamsViewModel = ViewModelProvider(this)[TeamListViewModel::class.java]
 
-        teamsViewModel.teamLiveData.observe(this.viewLifecycleOwner) {
+        teamsViewModel.teamsLiveData.observe(this.viewLifecycleOwner) {
             updateUi(it)
         }
 
