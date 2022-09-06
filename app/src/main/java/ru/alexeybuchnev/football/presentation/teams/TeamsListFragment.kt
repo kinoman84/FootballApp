@@ -5,6 +5,7 @@ import android.opengl.Visibility
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,8 +35,8 @@ class TeamsListFragment : Fragment(R.layout.fragment_teams_list) {
         teamsRecyclerView = view.findViewById(R.id.teams_list_recycler_View)
         teamsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
         //TODO ещё раз про лямбды почитать
-        teamsRecyclerView.adapter = TeamsListAdapter {
-            teamId -> teamClickListener?.onTeamSelected(teamId)
+        teamsRecyclerView.adapter = TeamsListAdapter { teamId ->
+            teamClickListener?.onTeamSelected(teamId)
         }
 
         teamsViewModel = ViewModelProvider(this)[TeamListViewModel::class.java]
@@ -50,7 +51,9 @@ class TeamsListFragment : Fragment(R.layout.fragment_teams_list) {
                     setLoading(true)
                 }
                 is TeamListViewModel.TeamsListViewState.Error -> {
-                    TODO()
+                    setLoading(false)
+                    Toast.makeText(requireContext(), state.exception.message, Toast.LENGTH_SHORT)
+                        .show()
                 }
             }
         }

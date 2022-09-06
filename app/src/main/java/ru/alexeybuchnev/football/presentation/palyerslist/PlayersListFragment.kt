@@ -3,6 +3,7 @@ package ru.alexeybuchnev.football.presentation.palyerslist
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -46,7 +47,11 @@ class PlayersListFragment : Fragment(R.layout.fragment_players_list) {
                     setLoading(false)
                     updateUi(state.players)
                 }
-                is PlayersListViewModel.PlayersListViewState.Error -> TODO()
+                is PlayersListViewModel.PlayersListViewState.Error -> {
+                    setLoading(false)
+                    Toast.makeText(requireContext(), state.exception.message, Toast.LENGTH_SHORT)
+                        .show()
+                }
             }
         }
 

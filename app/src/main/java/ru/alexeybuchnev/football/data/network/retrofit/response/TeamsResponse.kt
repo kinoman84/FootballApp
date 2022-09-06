@@ -1,11 +1,12 @@
 package ru.alexeybuchnev.football.data.network.retrofit.response
 
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class TeamsResponse (
-    @SerialName("response") val teams: List<TeamResponse>
+    @SerialName("response") val response: List<TeamResponse>,
 )
 
 @Serializable
