@@ -7,4 +7,4 @@ data class Player(
     val number: Int,
     val position: String,
     val photoUrl: String
-    )
+)

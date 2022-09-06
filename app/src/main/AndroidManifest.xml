@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="ru.alexeybuchnev.football">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".di.FootballApplication"
         android:allowBackup="true"

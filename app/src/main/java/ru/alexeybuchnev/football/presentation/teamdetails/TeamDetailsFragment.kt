@@ -4,17 +4,23 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import coil.load
+import kotlinx.coroutines.runBlocking
 import ru.alexeybuchnev.football.R
 import ru.alexeybuchnev.football.data.TeamRepositoryImpl
+import ru.alexeybuchnev.football.data.TeamRepositoryMockupImpl
 import ru.alexeybuchnev.football.model.Team
+import java.lang.IllegalArgumentException
 
 class TeamDetailsFragment : Fragment(R.layout.fragment_team_details) {
 
     private var selectedTeamId: Int? = null
     private var playerButtonCallback: PlayerButtonCallback? = null
+    private lateinit var teamDetailsViewModel: TeamDetailsViewModel
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -34,11 +40,15 @@ class TeamDetailsFragment : Fragment(R.layout.fragment_team_details) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val teamRepository = TeamRepositoryImpl.get()
+        teamDetailsViewModel = ViewModelProvider(this) [TeamDetailsViewModel::class.java]
 
-        val team = teamRepository.getTeam(selectedTeamId ?: return)
+        teamDetailsViewModel.teamDetailsLiveData.observe(this.viewLifecycleOwner) {
+            updateUi(it, view)
+        }
 
-        updateUi(team, view)
+        selectedTeamId?.let {
+            teamDetailsViewModel.loadTeamDetails(it)
+        }
     }
 
     private fun updateUi(team: Team, view: View) {
@@ -69,6 +79,22 @@ class TeamDetailsFragment : Fragment(R.layout.fragment_team_details) {
         view.findViewById<Button>(R.id.route_to_players_list_button)?.setOnClickListener {
             playerButtonCallback?.routeToPlayerList(team.id)
         }
+
+        view.findViewById<ImageView>(R.id.team_logo_image_view)?.load(team.logoUrl) {
+            placeholder(R.drawable.ic_baseline_sports_soccer_24)
+            error(R.drawable.ic_baseline_sports_soccer_24)
+        }
+
+        view.findViewById<ImageView>(R.id.stadium_photo_image_view)?.load(team.venue.imageUrl) {
+            placeholder(R.drawable.ic_baseline_stadium_24)
+            error(R.drawable.ic_baseline_stadium_24)
+        }
+    }
+
+    override fun onDetach() {
+        playerButtonCallback = null
+
+        super.onDetach()
     }
 
     interface PlayerButtonCallback {

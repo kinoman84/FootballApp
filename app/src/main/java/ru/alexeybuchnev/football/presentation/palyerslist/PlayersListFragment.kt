@@ -2,16 +2,19 @@ package ru.alexeybuchnev.football.presentation.palyerslist
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ProgressBar
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ru.alexeybuchnev.football.R
-import ru.alexeybuchnev.football.data.TeamRepositoryImpl
 import ru.alexeybuchnev.football.model.Player
 
 class PlayersListFragment : Fragment(R.layout.fragment_players_list) {
 
     private lateinit var playersRecyclerView: RecyclerView
+    private lateinit var playerViewModel: PlayersListViewModel
+    private lateinit var progressBar: ProgressBar
 
     private var selectedTeamId: Int? = null
 
@@ -26,20 +29,42 @@ class PlayersListFragment : Fragment(R.layout.fragment_players_list) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        progressBar = view.findViewById(R.id.progress_bar)
         playersRecyclerView = view.findViewById(R.id.players_list_recycler_view)
         playersRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         playersRecyclerView.adapter = PlayersListAdapter()
 
-        val teamRepository = TeamRepositoryImpl.get()
+        playerViewModel = ViewModelProvider(this)[PlayersListViewModel::class.java]
 
-        val players = teamRepository.getPlayers(selectedTeamId ?: return)
+        playerViewModel.playersStateListLiveData.observe(this.viewLifecycleOwner) { state ->
+            when (state) {
+                is PlayersListViewModel.PlayersListViewState.PlayersLoading -> {
+                    setLoading(true)
+                }
+                is PlayersListViewModel.PlayersListViewState.PlayersLoaded -> {
+                    setLoading(false)
+                    updateUi(state.players)
+                }
+                is PlayersListViewModel.PlayersListViewState.Error -> TODO()
+            }
+        }
 
-        updateUi(players)
+        selectedTeamId?.let {
+            playerViewModel.loadPlayers(it)
+        }
     }
 
     private fun updateUi(players: List<Player>) {
         (playersRecyclerView.adapter as PlayersListAdapter).setList(players)
+    }
+
+    private fun setLoading(isLoading: Boolean) {
+        when (isLoading) {
+            true -> progressBar.visibility = View.VISIBLE
+            false -> progressBar.visibility = View.GONE
+        }
+
     }
 
     companion object {

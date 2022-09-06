@@ -4,6 +4,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import ru.alexeybuchnev.football.R
 import ru.alexeybuchnev.football.model.Team
 
@@ -15,5 +16,9 @@ class TeamsListItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView
         teamNameTextView.text = team.name
         itemView.setOnClickListener {
             onTeamClick(team.id) }
+        teamLogoImageView.load(team.logoUrl) {
+            placeholder(R.drawable.ic_baseline_sports_soccer_24)
+            error(R.drawable.ic_baseline_sports_soccer_24)
+        }
     }
 }
