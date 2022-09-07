@@ -4,13 +4,13 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.create
 import ru.alexeybuchnev.football.data.network.NetworkDataSource
 import ru.alexeybuchnev.football.model.Player
 import ru.alexeybuchnev.football.model.Team
 import ru.alexeybuchnev.football.model.Venue
-import java.lang.Exception
 import java.util.NoSuchElementException
 import java.util.concurrent.TimeUnit
 
@@ -44,6 +44,10 @@ class RetrofitDataSource : NetworkDataSource {
     override suspend fun getPlayers(teamId: Int): List<Player> {
         val response = RetrofitModule.api.getPlayers(headers, teamId)
 
+        if (response.response.isNullOrEmpty()) {
+            throw throw NoSuchElementException("Error")
+        }
+
         val players = response.response.first().players.map {
             Player(
                 id = it.id,
@@ -69,7 +73,11 @@ class RetrofitDataSource : NetworkDataSource {
             league
         )
 
-        val teams = response.teams.map {
+        if (response.response.isEmpty()) {
+            throw NoSuchElementException("No teams")
+        }
+
+        val teams = response.response.map {
             Team(
                 id = it.teamData.id,
                 name = it.teamData.name,
@@ -107,6 +115,9 @@ private object RetrofitModule {
         .connectTimeout(10, TimeUnit.SECONDS)
         .writeTimeout(30, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
+        .addInterceptor(HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        })
         .build()
 
     private const val baseUrl = "https://v3.football.api-sports.io/"
