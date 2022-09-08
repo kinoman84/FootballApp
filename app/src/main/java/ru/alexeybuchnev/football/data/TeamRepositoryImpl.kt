@@ -1,5 +1,7 @@
 package ru.alexeybuchnev.football.data
 
+import ru.alexeybuchnev.football.data.local.LocalDataSource
+import ru.alexeybuchnev.football.data.local.LocalDataSourceImpl
 import ru.alexeybuchnev.football.data.network.NetworkDataSource
 import ru.alexeybuchnev.football.data.network.retrofit.RetrofitDataSource
 import ru.alexeybuchnev.football.model.Player
@@ -9,9 +11,16 @@ import java.lang.IllegalArgumentException
 class TeamRepositoryImpl private constructor() : TeamRepository {
 
     private val remoteData: NetworkDataSource  = RetrofitDataSource()
+    private val localRepository: LocalDataSource = LocalDataSourceImpl.get()
 
     override suspend fun getTeams(): List<Team> {
-        return remoteData.getTeams()
+        var teams = localRepository.getTeams()
+
+        if (teams.isEmpty()) {
+            teams = remoteData.getTeams()
+            localRepository.saveTeams(teams)
+        }
+        return teams
     }
 
     override suspend fun getTeam(teamId: Int): Team {
