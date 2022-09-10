@@ -146,6 +146,10 @@ class TeamRepositoryMockupImpl : TeamRepository {
         return players
     }
 
+    override suspend fun getTeamsCash(): List<Team> {
+        TODO("Not yet implemented")
+    }
+
     companion object {
         private var instance: TeamRepository? = null
 

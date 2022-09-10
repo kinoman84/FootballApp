@@ -8,7 +8,6 @@ import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import ru.alexeybuchnev.football.data.TeamRepositoryImpl
 import ru.alexeybuchnev.football.model.Team
-import java.lang.Exception
 
 class TeamListViewModel : ViewModel() {
 
@@ -27,8 +26,21 @@ class TeamListViewModel : ViewModel() {
         mutableTeamsViewStateLiveData.value = TeamsListViewState.TeamsLoading
 
         viewModelScope.launch(exceptionHandler) {
-            val teams = teamRepository.getTeams()
+            var teams = teamRepository.getTeamsCash()
 
+            if (teams.isNotEmpty()) {
+                mutableTeamsViewStateLiveData.value = TeamsListViewState.TeamsLoaded(teams)
+            }
+
+            teams = teamRepository.getTeams()
+            mutableTeamsViewStateLiveData.value = TeamsListViewState.TeamsLoaded(teams)
+
+        }
+    }
+
+    fun refreshData() {
+        viewModelScope.launch(exceptionHandler) {
+            val teams = teamRepository.getTeams()
             mutableTeamsViewStateLiveData.value = TeamsListViewState.TeamsLoaded(teams)
         }
     }

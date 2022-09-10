@@ -59,21 +59,21 @@ class TeamDetailsFragment : Fragment(R.layout.fragment_team_details) {
             team.founded
         )
 
-        view.findViewById<TextView>(R.id.stadium_name_text_view)?.text = team.venue.name
+        view.findViewById<TextView>(R.id.stadium_name_text_view)?.text = team.venue?.name
 
         view.findViewById<TextView>(R.id.stadium_address_text_view)?.text = String.format(
             requireContext().resources.getString(R.string.stadium_address),
-            team.venue.address
+            team.venue?.address
         )
 
         view.findViewById<TextView>(R.id.stadium_city_text_view)?.text = String.format(
             requireContext().resources.getString(R.string.stadium_city),
-            team.venue.city
+            team.venue?.city
         )
 
         view.findViewById<TextView>(R.id.stadium_capacity_text_view)?.text = String.format(
             requireContext().resources.getString(R.string.stadium_capacity),
-            team.venue.capacity
+            team.venue?.capacity
         )
 
         view.findViewById<Button>(R.id.route_to_players_list_button)?.setOnClickListener {
@@ -85,7 +85,7 @@ class TeamDetailsFragment : Fragment(R.layout.fragment_team_details) {
             error(R.drawable.ic_baseline_sports_soccer_24)
         }
 
-        view.findViewById<ImageView>(R.id.stadium_photo_image_view)?.load(team.venue.imageUrl) {
+        view.findViewById<ImageView>(R.id.stadium_photo_image_view)?.load(team.venue?.imageUrl) {
             placeholder(R.drawable.ic_baseline_stadium_24)
             error(R.drawable.ic_baseline_stadium_24)
         }

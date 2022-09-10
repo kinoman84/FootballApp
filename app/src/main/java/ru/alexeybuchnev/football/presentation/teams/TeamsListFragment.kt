@@ -90,7 +90,7 @@ class TeamsListFragment : Fragment(R.layout.fragment_teams_list) {
     }
 
     private fun refresh() {
-        teamsViewModel.loadTeams()
+        teamsViewModel.refreshData()
     }
 
     interface TeamListItemClickListener {
