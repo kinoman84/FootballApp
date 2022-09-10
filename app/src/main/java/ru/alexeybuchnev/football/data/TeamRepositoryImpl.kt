@@ -14,13 +14,15 @@ class TeamRepositoryImpl private constructor() : TeamRepository {
     private val localRepository: LocalDataSource = LocalDataSourceImpl.get()
 
     override suspend fun getTeams(): List<Team> {
-        var teams = localRepository.getTeams()
 
-        if (teams.isEmpty()) {
-            teams = remoteData.getTeams()
-            localRepository.saveTeams(teams)
-        }
+        val teams = remoteData.getTeams()
+        localRepository.saveTeams(teams)
+
         return teams
+    }
+
+    override suspend fun getTeamsCash(): List<Team> {
+        return localRepository.getTeams()
     }
 
     override suspend fun getTeam(teamId: Int): Team {
