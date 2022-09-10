@@ -3,8 +3,8 @@
     <dimen name="margin_space_1x">16dp</dimen>
     <dimen name="margin_space_2x">8dp</dimen>
 
-    <dimen name="text_size_title">34sp</dimen>
-    <dimen name="text_size_subtitle">24sp</dimen>
-    <dimen name="text_size_body_1x">16sp</dimen>
-    <dimen name="text_size_body_2x">14sp</dimen>
+    <dimen name="text_size_title">26sp</dimen>
+    <dimen name="text_size_subtitle">20sp</dimen>
+    <dimen name="text_size_body_1x">14sp</dimen>
+    <dimen name="text_size_body_2x">12sp</dimen>
 </resources>

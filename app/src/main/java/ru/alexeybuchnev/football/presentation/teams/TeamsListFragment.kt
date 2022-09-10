@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,6 +33,8 @@ class TeamsListFragment : Fragment(R.layout.fragment_teams_list) {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        (activity as? AppCompatActivity)?.supportActionBar?.title = "Football"
 
         progressBar = view.findViewById(R.id.progress_bar)
         swipeRefresh = view.findViewById(R.id.swipe_refresh)

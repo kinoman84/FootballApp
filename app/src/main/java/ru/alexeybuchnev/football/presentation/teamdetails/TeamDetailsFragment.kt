@@ -2,17 +2,17 @@ package ru.alexeybuchnev.football.presentation.teamdetails
 
 import android.content.Context
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import coil.load
-import kotlinx.coroutines.runBlocking
 import ru.alexeybuchnev.football.R
-import ru.alexeybuchnev.football.data.TeamRepositoryImpl
-import ru.alexeybuchnev.football.data.TeamRepositoryMockupImpl
 import ru.alexeybuchnev.football.model.Team
 import java.lang.IllegalArgumentException
 
@@ -35,6 +35,7 @@ class TeamDetailsFragment : Fragment(R.layout.fragment_team_details) {
         arguments?.let {
             selectedTeamId = it.getInt(ARG_TEAM_ID)
         }
+        setHasOptionsMenu(true)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -48,6 +49,20 @@ class TeamDetailsFragment : Fragment(R.layout.fragment_team_details) {
 
         selectedTeamId?.let {
             teamDetailsViewModel.loadTeamDetails(it)
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.mein_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_open_players_list -> {
+                playerButtonCallback?.routeToPlayerList(teamId = selectedTeamId ?: throw IllegalArgumentException())
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -76,10 +91,6 @@ class TeamDetailsFragment : Fragment(R.layout.fragment_team_details) {
             team.venue?.capacity
         )
 
-        view.findViewById<Button>(R.id.route_to_players_list_button)?.setOnClickListener {
-            playerButtonCallback?.routeToPlayerList(team.id)
-        }
-
         view.findViewById<ImageView>(R.id.team_logo_image_view)?.load(team.logoUrl) {
             placeholder(R.drawable.ic_baseline_sports_soccer_24)
             error(R.drawable.ic_baseline_sports_soccer_24)
@@ -89,6 +100,10 @@ class TeamDetailsFragment : Fragment(R.layout.fragment_team_details) {
             placeholder(R.drawable.ic_baseline_stadium_24)
             error(R.drawable.ic_baseline_stadium_24)
         }
+
+        (activity as? AppCompatActivity)?.supportActionBar?.title = team.name
+
+
     }
 
     override fun onDetach() {

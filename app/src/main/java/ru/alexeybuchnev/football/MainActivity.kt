@@ -33,7 +33,7 @@ class MainActivity :
     //TODO пересмотреть лекцию про фрагменты и перечитать доку
     private fun routeToTeamDetails(teamId: Int) {
         supportFragmentManager.beginTransaction()
-            .add(
+            .replace(
                 R.id.fragment_container,
                 TeamDetailsFragment.newInstance(teamId),
                 TeamDetailsFragment::class.java.simpleName
@@ -44,7 +44,7 @@ class MainActivity :
 
     private fun routeToPlayersList(teamId: Int) {
         supportFragmentManager.beginTransaction()
-            .add(
+            .replace(
                 R.id.fragment_container,
                 PlayersListFragment.newInstance(teamId),
                 PlayersListFragment::class.java.simpleName
