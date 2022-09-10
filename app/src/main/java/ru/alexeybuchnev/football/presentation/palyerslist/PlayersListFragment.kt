@@ -25,6 +25,7 @@ class PlayersListFragment : Fragment(R.layout.fragment_players_list) {
         arguments?.let {
             selectedTeamId = it.getInt(ARG_TEAM_ID)
         }
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
