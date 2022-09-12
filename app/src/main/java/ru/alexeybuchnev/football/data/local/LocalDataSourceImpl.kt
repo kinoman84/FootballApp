@@ -5,7 +5,6 @@ import androidx.room.Room
 import ru.alexeybuchnev.football.data.local.room.AppDatabase
 import ru.alexeybuchnev.football.data.local.room.entity.TeamEntity
 import ru.alexeybuchnev.football.data.local.room.entity.VenueEntity
-import ru.alexeybuchnev.football.model.Player
 import ru.alexeybuchnev.football.model.Team
 import ru.alexeybuchnev.football.model.Venue
 import java.lang.IllegalArgumentException
@@ -28,7 +27,6 @@ class LocalDataSourceImpl(applicationContext: Context) : LocalDataSource {
                 name = it.name,
                 founded = it.founded,
                 logoUrl = it.logoUrl,
-                players = emptyList(),
                 venue = toVenue(venuesEntity.find { venueEntity -> venueEntity.teamId == it.id })
             )
         }
@@ -50,12 +48,21 @@ class LocalDataSourceImpl(applicationContext: Context) : LocalDataSource {
         }
     }
 
-    override suspend fun getTeam(teamId: Int): Team {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getTeam(teamId: Int): Team? {
+        val team = db.teamDao().getTeam(teamId)
+        val venue = db.venueDao().getVenue(teamId)
 
-    override suspend fun getPlayers(teamId: Int): List<Player> {
-        TODO("Not yet implemented")
+        return if (team == null) {
+            null
+        } else {
+            Team(
+                id = team.id,
+                name = team.name,
+                founded = team.founded,
+                logoUrl = team.logoUrl,
+                venue = toVenue(venue)
+            )
+        }
     }
 
     override suspend fun saveTeams(teams: List<Team>) {
@@ -86,10 +93,6 @@ class LocalDataSourceImpl(applicationContext: Context) : LocalDataSource {
         }
 
         db.venueDao().insertVenue(venuesEntity)
-    }
-
-    override suspend fun savePlayers(players: List<Player>) {
-        TODO("Not yet implemented")
     }
 
     companion object {

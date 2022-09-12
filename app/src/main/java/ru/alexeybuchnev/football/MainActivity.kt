@@ -30,7 +30,6 @@ class MainActivity :
             .commit()
     }
 
-    //TODO пересмотреть лекцию про фрагменты и перечитать доку
     private fun routeToTeamDetails(teamId: Int) {
         supportFragmentManager.beginTransaction()
             .replace(

@@ -5,9 +5,6 @@ import ru.alexeybuchnev.football.model.Team
 
 interface LocalDataSource {
     suspend fun getTeams() : List<Team>
-    suspend fun getTeam(teamId: Int) : Team
-    suspend fun getPlayers(teamId: Int) : List<Player>
+    suspend fun getTeam(teamId: Int) : Team?
     suspend fun saveTeams(teams: List<Team>)
-    suspend fun savePlayers(players: List<Player>)
-
 }

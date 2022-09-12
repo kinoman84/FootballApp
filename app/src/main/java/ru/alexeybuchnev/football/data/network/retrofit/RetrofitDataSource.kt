@@ -44,7 +44,7 @@ class RetrofitDataSource : NetworkDataSource {
     override suspend fun getPlayers(teamId: Int): List<Player> {
         val response = RetrofitModule.api.getPlayers(headers, teamId)
 
-        if (response.response.isNullOrEmpty()) {
+        if (response.response.isEmpty()) {
             throw throw NoSuchElementException("Error")
         }
 
@@ -53,8 +53,7 @@ class RetrofitDataSource : NetworkDataSource {
                 id = it.id,
                 name = it.name,
                 age = it.age,
-                //TODO обработать необязательные поля
-                number = it.number ?: 0,
+                number = it.number,
                 position = it.position,
                 photoUrl = it.photoUrl
             )
@@ -81,23 +80,39 @@ class RetrofitDataSource : NetworkDataSource {
             Team(
                 id = it.teamData.id,
                 name = it.teamData.name,
-                //TODO реализовать обработку незаполненых полей
-                founded = it.teamData.founded ?: 0,
+                founded = it.teamData.founded,
                 logoUrl = it.teamData.logoUrl,
                 venue = Venue(
                     id = it.venueData.id,
                     name = it.venueData.name,
-                    address = it.venueData.address,
+                    address = it.venueData.address.mnemonicToChar(),
                     city = it.venueData.city,
                     capacity = it.venueData.capacity,
                     imageUrl = it.venueData.imageUrl
-                ),
-                //TODO убрать сисок игроков из команды
-                players = emptyList()
+                )
             )
         }
 
         return teams
+    }
+
+    /**
+     * В некоторых случаях текст содержал HTML мнемоники типа &apos; функция их уберает.
+     * + можно будет быстро добавить замену других мнемоников при необходимости
+     */
+    private fun String.mnemonicToChar() : String {
+
+        var clearedString = this
+
+        val mnemonics = mapOf(
+            "&apos;" to "'"
+        )
+
+        for (mnemonic in mnemonics) {
+            clearedString = clearedString.replace(mnemonic.key, mnemonic.value)
+        }
+
+        return clearedString
     }
 
 

@@ -10,27 +10,27 @@ import java.lang.IllegalArgumentException
 
 class TeamRepositoryImpl private constructor() : TeamRepository {
 
-    private val remoteData: NetworkDataSource  = RetrofitDataSource()
-    private val localRepository: LocalDataSource = LocalDataSourceImpl.get()
+    private val remoteDataSource: NetworkDataSource  = RetrofitDataSource()
+    private val localDataSource: LocalDataSource = LocalDataSourceImpl.get()
 
     override suspend fun getTeams(): List<Team> {
 
-        val teams = remoteData.getTeams()
-        localRepository.saveTeams(teams)
+        val teams = remoteDataSource.getTeams()
+        localDataSource.saveTeams(teams)
 
         return teams
     }
 
     override suspend fun getTeamsCash(): List<Team> {
-        return localRepository.getTeams()
+        return localDataSource.getTeams()
     }
 
     override suspend fun getTeam(teamId: Int): Team {
-        return remoteData.getTeam(teamId)
+        return localDataSource.getTeam(teamId) ?: remoteDataSource.getTeam(teamId)
     }
 
     override suspend fun getPlayers(teamId: Int): List<Player> {
-        return remoteData.getPlayers(teamId)
+        return remoteDataSource.getPlayers(teamId)
     }
 
     companion object {

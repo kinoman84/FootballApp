@@ -25,6 +25,14 @@ class PlayersListViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView)
             itemView.context.resources.getString(R.string.player_position),
             player.position
         )
+        if (player.number != null) {
+            numberTextView.text = String.format(
+                itemView.context.resources.getString(R.string.player_number),
+                player.number
+            )
+        } else {
+            numberTextView.visibility = View.GONE
+        }
         photoImageView.load(player.photoUrl) {
             placeholder(R.drawable.ic_baseline_face_24)
             error(R.drawable.ic_baseline_face_24)
