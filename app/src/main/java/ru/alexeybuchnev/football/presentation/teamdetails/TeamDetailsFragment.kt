@@ -69,10 +69,15 @@ class TeamDetailsFragment : Fragment(R.layout.fragment_team_details) {
     private fun updateUi(team: Team, view: View) {
         view.findViewById<TextView>(R.id.team_name_title_text_view)?.text = team.name
 
-        view.findViewById<TextView>(R.id.founding_year_text_view)?.text = String.format(
-            requireContext().resources.getString(R.string.founding_year),
-            team.founded
-        )
+        val foundedTextView = view.findViewById<TextView>(R.id.founding_year_text_view)
+        if (team.founded != null) {
+            foundedTextView.text = String.format(
+                requireContext().resources.getString(R.string.founding_year),
+                team.founded
+            )
+        } else {
+            foundedTextView.visibility = View.GONE
+        }
 
         view.findViewById<TextView>(R.id.stadium_name_text_view)?.text = team.venue?.name
 

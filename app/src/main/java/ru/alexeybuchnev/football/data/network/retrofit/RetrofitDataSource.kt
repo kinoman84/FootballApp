@@ -53,8 +53,7 @@ class RetrofitDataSource : NetworkDataSource {
                 id = it.id,
                 name = it.name,
                 age = it.age,
-                //TODO обработать необязательные поля
-                number = it.number ?: 0,
+                number = it.number,
                 position = it.position,
                 photoUrl = it.photoUrl
             )
@@ -81,8 +80,7 @@ class RetrofitDataSource : NetworkDataSource {
             Team(
                 id = it.teamData.id,
                 name = it.teamData.name,
-                //TODO реализовать обработку незаполненых полей
-                founded = it.teamData.founded ?: 0,
+                founded = it.teamData.founded,
                 logoUrl = it.teamData.logoUrl,
                 venue = Venue(
                     id = it.venueData.id,
