@@ -26,7 +26,7 @@ class TeamRepositoryImpl private constructor() : TeamRepository {
     }
 
     override suspend fun getTeam(teamId: Int): Team {
-        return remoteData.getTeam(teamId)
+        return localRepository.getTeam(teamId) ?: remoteData.getTeam(teamId)
     }
 
     override suspend fun getPlayers(teamId: Int): List<Player> {
