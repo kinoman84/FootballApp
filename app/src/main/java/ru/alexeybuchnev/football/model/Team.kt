@@ -5,6 +5,5 @@ data class Team(
     val name: String,
     val founded: Int,
     val logoUrl: String,
-    val venue: Venue? = null,
-    val players: List<Player>
+    val venue: Venue? = null
 )

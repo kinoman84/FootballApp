@@ -91,9 +91,7 @@ class RetrofitDataSource : NetworkDataSource {
                     city = it.venueData.city,
                     capacity = it.venueData.capacity,
                     imageUrl = it.venueData.imageUrl
-                ),
-                //TODO убрать сисок игроков из команды
-                players = emptyList()
+                )
             )
         }
 

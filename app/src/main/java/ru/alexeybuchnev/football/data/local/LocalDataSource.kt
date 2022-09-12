@@ -7,5 +7,4 @@ interface LocalDataSource {
     suspend fun getTeams() : List<Team>
     suspend fun getTeam(teamId: Int) : Team?
     suspend fun saveTeams(teams: List<Team>)
-
 }

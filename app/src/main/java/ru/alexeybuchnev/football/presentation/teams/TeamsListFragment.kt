@@ -41,7 +41,6 @@ class TeamsListFragment : Fragment(R.layout.fragment_teams_list) {
         teamsRecyclerView = view.findViewById(R.id.teams_list_recycler_View)
 
         teamsRecyclerView.layoutManager = LinearLayoutManager(requireContext())
-        //TODO ещё раз про лямбды почитать
         teamsRecyclerView.adapter = TeamsListAdapter { teamId ->
             teamClickListener?.onTeamSelected(teamId)
         }

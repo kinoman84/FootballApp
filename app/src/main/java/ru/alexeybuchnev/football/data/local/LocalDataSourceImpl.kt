@@ -27,7 +27,6 @@ class LocalDataSourceImpl(applicationContext: Context) : LocalDataSource {
                 name = it.name,
                 founded = it.founded,
                 logoUrl = it.logoUrl,
-                players = emptyList(),
                 venue = toVenue(venuesEntity.find { venueEntity -> venueEntity.teamId == it.id })
             )
         }
@@ -61,7 +60,6 @@ class LocalDataSourceImpl(applicationContext: Context) : LocalDataSource {
                 name = team.name,
                 founded = team.founded,
                 logoUrl = team.logoUrl,
-                players = emptyList(),
                 venue = toVenue(venue)
             )
         }
