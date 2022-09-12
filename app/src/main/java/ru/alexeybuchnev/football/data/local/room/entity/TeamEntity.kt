@@ -8,6 +8,6 @@ data class TeamEntity(
     @PrimaryKey
     val id: Int,
     val name: String,
-    val founded: Int,
+    val founded: Int? = null,
     val logoUrl: String
 )
