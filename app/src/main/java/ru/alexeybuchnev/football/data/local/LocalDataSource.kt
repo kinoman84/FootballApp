@@ -1,7 +1,6 @@
 package ru.alexeybuchnev.football.data.local
 
-import ru.alexeybuchnev.football.model.Player
-import ru.alexeybuchnev.football.model.Team
+import ru.alexeybuchnev.football.domain.entity.Team
 
 interface LocalDataSource {
     suspend fun getTeams() : List<Team>

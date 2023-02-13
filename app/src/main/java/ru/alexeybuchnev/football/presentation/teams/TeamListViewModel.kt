@@ -7,11 +7,13 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import ru.alexeybuchnev.football.data.TeamRepositoryImpl
-import ru.alexeybuchnev.football.model.Team
+import ru.alexeybuchnev.football.domain.entity.Team
+import ru.alexeybuchnev.football.domain.usecase.GetTeamListUseCase
 
 class TeamListViewModel : ViewModel() {
 
     private val teamRepository = TeamRepositoryImpl.get()
+    private val getTeamListUseCase = GetTeamListUseCase(teamRepository)
 
     private val exceptionHandler = CoroutineExceptionHandler {
         _, throwable ->
@@ -32,7 +34,7 @@ class TeamListViewModel : ViewModel() {
                 mutableTeamsViewStateLiveData.value = TeamsListViewState.TeamsLoaded(teams)
             }
 
-            teams = teamRepository.getTeams()
+            teams = getTeamListUseCase()
             mutableTeamsViewStateLiveData.value = TeamsListViewState.TeamsLoaded(teams)
 
         }

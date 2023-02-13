@@ -8,9 +8,9 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.create
 import ru.alexeybuchnev.football.data.network.NetworkDataSource
-import ru.alexeybuchnev.football.model.Player
-import ru.alexeybuchnev.football.model.Team
-import ru.alexeybuchnev.football.model.Venue
+import ru.alexeybuchnev.football.domain.entity.Player
+import ru.alexeybuchnev.football.domain.entity.Team
+import ru.alexeybuchnev.football.domain.entity.Venue
 import java.util.NoSuchElementException
 import java.util.concurrent.TimeUnit
 

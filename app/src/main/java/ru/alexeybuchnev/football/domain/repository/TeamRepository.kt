@@ -1,7 +1,8 @@
-package ru.alexeybuchnev.football.data
+package ru.alexeybuchnev.football.domain.repository
 
-import ru.alexeybuchnev.football.model.Player
-import ru.alexeybuchnev.football.model.Team
+import androidx.lifecycle.LiveData
+import ru.alexeybuchnev.football.domain.entity.Player
+import ru.alexeybuchnev.football.domain.entity.Team
 
 interface TeamRepository {
     suspend fun getTeams() : List<Team>

@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.alexeybuchnev.football.R
-import ru.alexeybuchnev.football.model.Team
+import ru.alexeybuchnev.football.domain.entity.Team
 
 class TeamsListAdapter(private val onTeamClick: (teamId: Int) -> Unit) :
     RecyclerView.Adapter<TeamsListItemViewHolder>() {

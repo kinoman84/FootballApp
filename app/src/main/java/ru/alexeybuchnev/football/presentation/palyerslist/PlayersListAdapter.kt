@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.alexeybuchnev.football.R
-import ru.alexeybuchnev.football.model.Player
+import ru.alexeybuchnev.football.domain.entity.Player
 
 class PlayersListAdapter : RecyclerView.Adapter<PlayersListViewHolder>() {
 

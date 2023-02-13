@@ -1,7 +1,6 @@
 package ru.alexeybuchnev.football.presentation.teams
 
 import android.content.Context
-import android.opengl.Visibility
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
@@ -13,7 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import ru.alexeybuchnev.football.R
-import ru.alexeybuchnev.football.model.Team
+import ru.alexeybuchnev.football.domain.entity.Team
 
 class TeamsListFragment : Fragment(R.layout.fragment_teams_list) {
 
