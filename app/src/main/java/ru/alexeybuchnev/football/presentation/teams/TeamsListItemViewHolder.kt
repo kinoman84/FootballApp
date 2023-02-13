@@ -6,7 +6,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import ru.alexeybuchnev.football.R
-import ru.alexeybuchnev.football.model.Team
+import ru.alexeybuchnev.football.domain.entity.Team
 
 class TeamsListItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 

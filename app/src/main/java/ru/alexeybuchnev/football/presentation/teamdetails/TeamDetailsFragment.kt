@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import coil.load
 import ru.alexeybuchnev.football.R
-import ru.alexeybuchnev.football.model.Team
+import ru.alexeybuchnev.football.domain.entity.Team
 import java.lang.IllegalArgumentException
 
 class TeamDetailsFragment : Fragment(R.layout.fragment_team_details) {

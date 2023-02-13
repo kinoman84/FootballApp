@@ -9,7 +9,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ru.alexeybuchnev.football.R
-import ru.alexeybuchnev.football.model.Player
+import ru.alexeybuchnev.football.domain.entity.Player
 
 class PlayersListFragment : Fragment(R.layout.fragment_players_list) {
 

@@ -1,4 +1,4 @@
-package ru.alexeybuchnev.football.model
+package ru.alexeybuchnev.football.domain.entity
 
 data class Venue(
     val id: Int,

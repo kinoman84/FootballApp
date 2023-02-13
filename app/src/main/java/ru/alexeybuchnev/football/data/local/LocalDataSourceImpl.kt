@@ -5,8 +5,8 @@ import androidx.room.Room
 import ru.alexeybuchnev.football.data.local.room.AppDatabase
 import ru.alexeybuchnev.football.data.local.room.entity.TeamEntity
 import ru.alexeybuchnev.football.data.local.room.entity.VenueEntity
-import ru.alexeybuchnev.football.model.Team
-import ru.alexeybuchnev.football.model.Venue
+import ru.alexeybuchnev.football.domain.entity.Team
+import ru.alexeybuchnev.football.domain.entity.Venue
 import java.lang.IllegalArgumentException
 
 class LocalDataSourceImpl(applicationContext: Context) : LocalDataSource {
