@@ -1,4 +1,4 @@
-package ru.alexeybuchnev.football.data.network.retrofit
+package ru.alexeybuchnev.football.data.remote.retrofit
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
@@ -7,7 +7,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.create
-import ru.alexeybuchnev.football.data.network.NetworkDataSource
+import ru.alexeybuchnev.football.data.remote.NetworkDataSource
 import ru.alexeybuchnev.football.domain.entity.Player
 import ru.alexeybuchnev.football.domain.entity.Team
 import ru.alexeybuchnev.football.domain.entity.Venue

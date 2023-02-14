@@ -3,8 +3,8 @@ package ru.alexeybuchnev.football.data.local
 import android.content.Context
 import androidx.room.Room
 import ru.alexeybuchnev.football.data.local.room.AppDatabase
-import ru.alexeybuchnev.football.data.local.room.entity.TeamEntity
-import ru.alexeybuchnev.football.data.local.room.entity.VenueEntity
+import ru.alexeybuchnev.football.data.local.room.model.TeamDbModel
+import ru.alexeybuchnev.football.data.local.room.model.VenueDbModel
 import ru.alexeybuchnev.football.domain.entity.Team
 import ru.alexeybuchnev.football.domain.entity.Venue
 import java.lang.IllegalArgumentException
@@ -32,18 +32,18 @@ class LocalDataSourceImpl(applicationContext: Context) : LocalDataSource {
         }
     }
 
-    private fun toVenue (venueEntity: VenueEntity?): Venue? {
+    private fun toVenue (venueDbModel: VenueDbModel?): Venue? {
 
-        return if (venueEntity == null) {
+        return if (venueDbModel == null) {
             null
         } else {
             Venue(
-                id = venueEntity.id,
-                name = venueEntity.name,
-                address = venueEntity.address,
-                city = venueEntity.city,
-                capacity = venueEntity.capacity,
-                imageUrl = venueEntity.imageUrl
+                id = venueDbModel.id,
+                name = venueDbModel.name,
+                address = venueDbModel.address,
+                city = venueDbModel.city,
+                capacity = venueDbModel.capacity,
+                imageUrl = venueDbModel.imageUrl
             )
         }
     }
@@ -67,8 +67,8 @@ class LocalDataSourceImpl(applicationContext: Context) : LocalDataSource {
 
     override suspend fun saveTeams(teams: List<Team>) {
 
-        val teamsEntity: List<TeamEntity> = teams.map {
-            TeamEntity(
+        val teamsEntity: List<TeamDbModel> = teams.map {
+            TeamDbModel(
                 id = it.id,
                 name = it.name,
                 founded = it.founded,
@@ -78,9 +78,9 @@ class LocalDataSourceImpl(applicationContext: Context) : LocalDataSource {
 
         db.teamDao().insertTeams(teamsEntity)
 
-        val venuesEntity: List<VenueEntity> = teams.map { team ->
+        val venuesEntity: List<VenueDbModel> = teams.map { team ->
             team.venue?.let {
-                VenueEntity(
+                VenueDbModel(
                     id = it.id,
                     name = it.name,
                     address = it.address,

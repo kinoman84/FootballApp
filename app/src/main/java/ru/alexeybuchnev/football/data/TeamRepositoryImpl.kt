@@ -2,8 +2,8 @@ package ru.alexeybuchnev.football.data
 
 import ru.alexeybuchnev.football.data.local.LocalDataSource
 import ru.alexeybuchnev.football.data.local.LocalDataSourceImpl
-import ru.alexeybuchnev.football.data.network.NetworkDataSource
-import ru.alexeybuchnev.football.data.network.retrofit.RetrofitDataSource
+import ru.alexeybuchnev.football.data.remote.NetworkDataSource
+import ru.alexeybuchnev.football.data.remote.retrofit.RetrofitDataSource
 import ru.alexeybuchnev.football.domain.entity.Player
 import ru.alexeybuchnev.football.domain.entity.Team
 import ru.alexeybuchnev.football.domain.repository.TeamRepository

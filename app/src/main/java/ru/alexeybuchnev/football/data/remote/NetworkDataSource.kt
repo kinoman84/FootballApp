@@ -1,4 +1,4 @@
-package ru.alexeybuchnev.football.data.network
+package ru.alexeybuchnev.football.data.remote
 
 import ru.alexeybuchnev.football.domain.entity.Player
 import ru.alexeybuchnev.football.domain.entity.Team
