@@ -1,9 +1,11 @@
 package ru.alexeybuchnev.football.data
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Transformations
 import ru.alexeybuchnev.football.data.local.LocalDataSource
 import ru.alexeybuchnev.football.data.local.LocalDataSourceImpl
-import ru.alexeybuchnev.football.data.network.NetworkDataSource
-import ru.alexeybuchnev.football.data.network.retrofit.RetrofitDataSource
+import ru.alexeybuchnev.football.data.remote.RemoteDataSource
+import ru.alexeybuchnev.football.data.remote.retrofit.RetrofitDataSourceImpl
 import ru.alexeybuchnev.football.domain.entity.Player
 import ru.alexeybuchnev.football.domain.entity.Team
 import ru.alexeybuchnev.football.domain.repository.TeamRepository
@@ -11,27 +13,46 @@ import java.lang.IllegalArgumentException
 
 class TeamRepositoryImpl private constructor() : TeamRepository {
 
-    private val remoteDataSource: NetworkDataSource  = RetrofitDataSource()
+    private val remoteDataSource: RemoteDataSource = RetrofitDataSourceImpl()
     private val localDataSource: LocalDataSource = LocalDataSourceImpl.get()
 
-    override suspend fun getTeams(): List<Team> {
-
-        val teams = remoteDataSource.getTeams()
-        localDataSource.saveTeams(teams)
-
-        return teams
+    override fun getTeams(): LiveData<List<Team>> {
+        return Transformations.map(localDataSource.getTeams()) { listTeamDbModel ->
+            listTeamDbModel.map {
+                TeamMapper.teamDbModelToTeam(
+                    it
+                )
+            }
+        }
     }
 
-    override suspend fun getTeamsCash(): List<Team> {
-        return localDataSource.getTeams()
-    }
+    override fun getTeam(teamId: Int): LiveData<Team> {
 
-    override suspend fun getTeam(teamId: Int): Team {
-        return localDataSource.getTeam(teamId) ?: remoteDataSource.getTeam(teamId)
+        val team = localDataSource.getTeam(teamId) ?: throw RuntimeException(
+            "don't find team by id $teamId"
+        )
+
+        return Transformations.map(team) {
+            TeamMapper.teamWithVenueDbModelToTeam(it)
+        }
     }
 
     override suspend fun getPlayers(teamId: Int): List<Player> {
-        return remoteDataSource.getPlayers(teamId)
+        return TeamMapper.playerDtoListToPlayerList(remoteDataSource.getPlayers(teamId))
+    }
+
+    override suspend fun updateData() {
+        val teamsDto = remoteDataSource.getTeams()
+        localDataSource.saveTeams(
+            teamsDto.map {
+                TeamMapper.teamItemDtoToTeamDbModel(it)
+            }
+        )
+        localDataSource.saveVenues(
+            teamsDto.map {
+                TeamMapper.teamItemDtoToVenueDbModel(it)
+            }
+        )
     }
 
     companion object {
@@ -43,7 +64,7 @@ class TeamRepositoryImpl private constructor() : TeamRepository {
             }
         }
 
-        fun get() : TeamRepository {
+        fun get(): TeamRepository {
             return instance ?: throw IllegalArgumentException("TeamRepository must be initialized")
         }
     }

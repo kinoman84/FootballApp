@@ -1,9 +1,15 @@
 package ru.alexeybuchnev.football.data.local
 
-import ru.alexeybuchnev.football.domain.entity.Team
+import androidx.lifecycle.LiveData
+import ru.alexeybuchnev.football.data.local.room.dao.VenueDao
+import ru.alexeybuchnev.football.data.local.room.model.TeamDbModel
+import ru.alexeybuchnev.football.data.local.room.model.TeamWithVenueDbModel
+import ru.alexeybuchnev.football.data.local.room.model.VenueDbModel
 
 interface LocalDataSource {
-    suspend fun getTeams() : List<Team>
-    suspend fun getTeam(teamId: Int) : Team?
-    suspend fun saveTeams(teams: List<Team>)
+    fun getTeams() : LiveData<List<TeamDbModel>>
+    fun getTeam(teamId: Int) : LiveData<TeamWithVenueDbModel>?
+    suspend fun saveTeams(teams: List<TeamDbModel>)
+    fun getVenue(teamId: Int): LiveData<VenueDbModel>
+    suspend fun saveVenues(venue: List<VenueDbModel>)
 }

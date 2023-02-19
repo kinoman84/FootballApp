@@ -67,7 +67,7 @@ class TeamsListFragment : Fragment(R.layout.fragment_teams_list) {
             }
         }
 
-        teamsViewModel.loadTeams()
+        teamsViewModel.refreshData()
 
     }
 

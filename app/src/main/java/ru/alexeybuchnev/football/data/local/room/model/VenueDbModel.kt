@@ -1,10 +1,10 @@
-package ru.alexeybuchnev.football.data.local.room.entity
+package ru.alexeybuchnev.football.data.local.room.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "venue")
-data class VenueEntity(
+data class VenueDbModel(
     @PrimaryKey
     val id: Int,
     val name: String,

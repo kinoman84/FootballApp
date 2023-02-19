@@ -12,8 +12,7 @@ import ru.alexeybuchnev.football.domain.usecase.GetPlayerListUseCase
 
 class PlayersListViewModel : ViewModel() {
 
-    private val teamRepository = TeamRepositoryImpl.get()
-    private val getPlayerListUseCase = GetPlayerListUseCase(teamRepository)
+    private val getPlayerListUseCase = GetPlayerListUseCase(TeamRepositoryImpl.get())
 
     private val exceptionHandler = CoroutineExceptionHandler {
             _, throwable ->

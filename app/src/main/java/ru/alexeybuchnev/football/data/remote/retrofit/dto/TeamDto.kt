@@ -1,22 +1,21 @@
-package ru.alexeybuchnev.football.data.network.retrofit.response
+package ru.alexeybuchnev.football.data.remote.retrofit.dto
 
-import kotlinx.serialization.Contextual
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class TeamsResponse (
-    @SerialName("response") val response: List<TeamResponse>,
+data class TeamResponseDto (
+    @SerialName("response") val response: List<TeamItemDto>,
 )
 
 @Serializable
-data class TeamResponse(
-    @SerialName("team") val teamData: TeamResponseData,
-    @SerialName("venue") val venueData: VenueResponseData
+data class TeamItemDto(
+    @SerialName("team") val teamData: TeamInfoDto,
+    @SerialName("venue") val venueData: VenueDto
 )
 
 @Serializable
-data class TeamResponseData(
+data class TeamInfoDto(
     @SerialName("id") val id: Int,
     @SerialName("name") val name: String,
     @SerialName("founded") val founded: Int? = null,
@@ -24,7 +23,7 @@ data class TeamResponseData(
 )
 
 @Serializable
-data class VenueResponseData(
+data class VenueDto(
     @SerialName("id") val id: Int,
     @SerialName("name") val name: String,
     @SerialName("address") val address: String,

@@ -5,8 +5,8 @@ import ru.alexeybuchnev.football.domain.entity.Player
 import ru.alexeybuchnev.football.domain.entity.Team
 
 interface TeamRepository {
-    suspend fun getTeams() : List<Team>
-    suspend fun getTeamsCash() : List<Team>
-    suspend fun getTeam(teamId: Int) : Team
+    fun getTeams(): LiveData<List<Team>>
+    fun getTeam(teamId: Int): LiveData<Team>
     suspend fun getPlayers(teamId: Int): List<Player>
+    suspend fun updateData()
 }

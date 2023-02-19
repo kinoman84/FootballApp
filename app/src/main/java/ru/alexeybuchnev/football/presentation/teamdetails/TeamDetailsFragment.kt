@@ -41,14 +41,12 @@ class TeamDetailsFragment : Fragment(R.layout.fragment_team_details) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        teamDetailsViewModel = ViewModelProvider(this) [TeamDetailsViewModel::class.java]
-
-        teamDetailsViewModel.teamDetailsLiveData.observe(this.viewLifecycleOwner) {
-            updateUi(it, view)
-        }
+        teamDetailsViewModel = ViewModelProvider(this)[TeamDetailsViewModel::class.java]
 
         selectedTeamId?.let {
-            teamDetailsViewModel.loadTeamDetails(it)
+            teamDetailsViewModel.getTeamDetails(it).observe(this.viewLifecycleOwner) {
+                updateUi(it, view)
+            }
         }
     }
 
@@ -59,7 +57,9 @@ class TeamDetailsFragment : Fragment(R.layout.fragment_team_details) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_open_players_list -> {
-                playerButtonCallback?.routeToPlayerList(teamId = selectedTeamId ?: throw IllegalArgumentException())
+                playerButtonCallback?.routeToPlayerList(
+                    teamId = selectedTeamId ?: throw IllegalArgumentException()
+                )
                 true
             }
             else -> super.onOptionsItemSelected(item)

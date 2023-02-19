@@ -1,49 +1,46 @@
 package ru.alexeybuchnev.football.presentation.teams
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
 import ru.alexeybuchnev.football.data.TeamRepositoryImpl
 import ru.alexeybuchnev.football.domain.entity.Team
 import ru.alexeybuchnev.football.domain.usecase.GetTeamListUseCase
+import ru.alexeybuchnev.football.domain.usecase.UpdateDataUseCase
 
 class TeamListViewModel : ViewModel() {
 
     private val teamRepository = TeamRepositoryImpl.get()
     private val getTeamListUseCase = GetTeamListUseCase(teamRepository)
+    private val updateDataUseCase = UpdateDataUseCase(teamRepository)
+
+    private val teamListLiveData = Transformations.map(getTeamListUseCase()) {
+        if (it.isNullOrEmpty()) {
+            TeamsListViewState.TeamsLoading
+        }
+        TeamsListViewState.TeamsLoaded(it)
+    }
 
     private val exceptionHandler = CoroutineExceptionHandler {
         _, throwable ->
-        mutableTeamsViewStateLiveData.value = TeamsListViewState.Error(throwable)
+        mutableLoadingStateLiveData.value = TeamsListViewState.Error(throwable)
     }
 
-    private val mutableTeamsViewStateLiveData = MutableLiveData<TeamsListViewState>()
-    val teamsViewStateLiveData: LiveData<TeamsListViewState> get() = mutableTeamsViewStateLiveData
+    private val mutableLoadingStateLiveData = MutableLiveData<TeamsListViewState>()
+    private val loadingStateLiveData: LiveData<TeamsListViewState> get() = mutableLoadingStateLiveData
 
-    fun loadTeams() {
+    val teamsViewStateLiveData = MediatorLiveData<TeamsListViewState>()
 
-        mutableTeamsViewStateLiveData.value = TeamsListViewState.TeamsLoading
-
-        viewModelScope.launch(exceptionHandler) {
-            var teams = teamRepository.getTeamsCash()
-
-            if (teams.isNotEmpty()) {
-                mutableTeamsViewStateLiveData.value = TeamsListViewState.TeamsLoaded(teams)
-            }
-
-            teams = getTeamListUseCase()
-            mutableTeamsViewStateLiveData.value = TeamsListViewState.TeamsLoaded(teams)
-
-        }
+    init {
+        teamsViewStateLiveData.addSource(loadingStateLiveData) {teamsViewStateLiveData.value = it}
+        teamsViewStateLiveData.addSource(teamListLiveData) {teamsViewStateLiveData.value = it}
     }
+
 
     fun refreshData() {
+        mutableLoadingStateLiveData.value = TeamsListViewState.TeamsLoading
         viewModelScope.launch(exceptionHandler) {
-            val teams = teamRepository.getTeams()
-            mutableTeamsViewStateLiveData.value = TeamsListViewState.TeamsLoaded(teams)
+            updateDataUseCase()
         }
     }
 
