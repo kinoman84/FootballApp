@@ -12,8 +12,9 @@ import ru.alexeybuchnev.football.data.remote.RemoteDataSource
 import ru.alexeybuchnev.football.data.remote.retrofit.dto.PlayerDto
 import ru.alexeybuchnev.football.data.remote.retrofit.dto.TeamItemDto
 import java.util.concurrent.TimeUnit
+import javax.inject.Inject
 
-class RetrofitDataSourceImpl : RemoteDataSource {
+class RetrofitDataSourceImpl: RemoteDataSource {
 
     private val headers = mapOf(
         KEY_HEADER_NAME to KEY_HEADER_VALUE,

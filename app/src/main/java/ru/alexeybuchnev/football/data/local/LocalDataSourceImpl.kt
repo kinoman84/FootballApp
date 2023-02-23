@@ -7,7 +7,6 @@ import ru.alexeybuchnev.football.data.local.room.AppDatabase
 import ru.alexeybuchnev.football.data.local.room.model.TeamDbModel
 import ru.alexeybuchnev.football.data.local.room.model.TeamWithVenueDbModel
 import ru.alexeybuchnev.football.data.local.room.model.VenueDbModel
-import java.lang.IllegalArgumentException
 
 class LocalDataSourceImpl(applicationContext: Context) : LocalDataSource {
 
