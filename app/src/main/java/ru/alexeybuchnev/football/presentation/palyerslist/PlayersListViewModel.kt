@@ -6,13 +6,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
-import ru.alexeybuchnev.football.data.TeamRepositoryImpl
 import ru.alexeybuchnev.football.domain.entity.Player
 import ru.alexeybuchnev.football.domain.usecase.GetPlayerListUseCase
+import javax.inject.Inject
 
-class PlayersListViewModel : ViewModel() {
-
-    private val getPlayerListUseCase = GetPlayerListUseCase(TeamRepositoryImpl.get())
+class PlayersListViewModel @Inject constructor(
+    private val getPlayerListUseCase: GetPlayerListUseCase
+) : ViewModel() {
 
     private val exceptionHandler = CoroutineExceptionHandler {
             _, throwable ->

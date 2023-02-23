@@ -7,15 +7,11 @@ import ru.alexeybuchnev.football.data.local.room.AppDatabase
 import ru.alexeybuchnev.football.data.local.room.model.TeamDbModel
 import ru.alexeybuchnev.football.data.local.room.model.TeamWithVenueDbModel
 import ru.alexeybuchnev.football.data.local.room.model.VenueDbModel
-import java.lang.IllegalArgumentException
+import javax.inject.Inject
 
-class LocalDataSourceImpl(applicationContext: Context) : LocalDataSource {
-
-    private val db = Room.databaseBuilder(
-        applicationContext,
-        AppDatabase::class.java,
-        "team-database"
-    ).build()
+class LocalDataSourceImpl @Inject constructor(
+    private val db: AppDatabase
+) : LocalDataSource {
 
     override fun getTeams(): LiveData<List<TeamDbModel>> =
         db.teamDao().getTeams()
@@ -32,20 +28,5 @@ class LocalDataSourceImpl(applicationContext: Context) : LocalDataSource {
 
     override suspend fun saveVenues(venue: List<VenueDbModel>) {
         db.venueDao().insertVenue(venue)
-    }
-
-    companion object {
-        private var instance: LocalDataSource? = null
-
-        fun initialize(applicationContext: Context) {
-            if (instance == null) {
-                instance = LocalDataSourceImpl(applicationContext)
-            }
-        }
-
-        fun get(): LocalDataSource {
-            return instance
-                ?: throw IllegalArgumentException("LocalDataSourceImpl must be initialized")
-        }
     }
 }

@@ -9,17 +9,31 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ru.alexeybuchnev.football.R
+import ru.alexeybuchnev.football.di.FootballApplication
 import ru.alexeybuchnev.football.domain.entity.Player
+import ru.alexeybuchnev.football.presentation.ViewModelFactory
+import javax.inject.Inject
 
 class PlayersListFragment : Fragment(R.layout.fragment_players_list) {
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val component by lazy {
+        (requireActivity().application as FootballApplication).component
+    }
+
+    private val playerViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[PlayersListViewModel::class.java]
+    }
+
     private lateinit var playersRecyclerView: RecyclerView
-    private lateinit var playerViewModel: PlayersListViewModel
     private lateinit var progressBar: ProgressBar
 
     private var selectedTeamId: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        component.inject(this)
         super.onCreate(savedInstanceState)
 
         arguments?.let {
@@ -36,8 +50,6 @@ class PlayersListFragment : Fragment(R.layout.fragment_players_list) {
         playersRecyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         playersRecyclerView.adapter = PlayersListAdapter()
-
-        playerViewModel = ViewModelProvider(this)[PlayersListViewModel::class.java]
 
         playerViewModel.playersStateListLiveData.observe(this.viewLifecycleOwner) { state ->
             when (state) {

@@ -3,16 +3,16 @@ package ru.alexeybuchnev.football.presentation.teams
 import androidx.lifecycle.*
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.launch
-import ru.alexeybuchnev.football.data.TeamRepositoryImpl
 import ru.alexeybuchnev.football.domain.entity.Team
 import ru.alexeybuchnev.football.domain.usecase.GetTeamListUseCase
 import ru.alexeybuchnev.football.domain.usecase.UpdateDataUseCase
+import javax.inject.Inject
 
-class TeamListViewModel : ViewModel() {
+class TeamListViewModel @Inject constructor(
+    getTeamListUseCase: GetTeamListUseCase,
+    val updateDataUseCase: UpdateDataUseCase
+) : ViewModel() {
 
-    private val teamRepository = TeamRepositoryImpl.get()
-    private val getTeamListUseCase = GetTeamListUseCase(teamRepository)
-    private val updateDataUseCase = UpdateDataUseCase(teamRepository)
 
     private val teamListLiveData = Transformations.map(getTeamListUseCase()) {
         if (it.isNullOrEmpty()) {
@@ -21,8 +21,7 @@ class TeamListViewModel : ViewModel() {
         TeamsListViewState.TeamsLoaded(it)
     }
 
-    private val exceptionHandler = CoroutineExceptionHandler {
-        _, throwable ->
+    private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         mutableLoadingStateLiveData.value = TeamsListViewState.Error(throwable)
     }
 
@@ -32,8 +31,8 @@ class TeamListViewModel : ViewModel() {
     val teamsViewStateLiveData = MediatorLiveData<TeamsListViewState>()
 
     init {
-        teamsViewStateLiveData.addSource(loadingStateLiveData) {teamsViewStateLiveData.value = it}
-        teamsViewStateLiveData.addSource(teamListLiveData) {teamsViewStateLiveData.value = it}
+        teamsViewStateLiveData.addSource(loadingStateLiveData) { teamsViewStateLiveData.value = it }
+        teamsViewStateLiveData.addSource(teamListLiveData) { teamsViewStateLiveData.value = it }
     }
 
 
@@ -45,8 +44,8 @@ class TeamListViewModel : ViewModel() {
     }
 
     sealed class TeamsListViewState {
-        data class TeamsLoaded(val teams: List<Team>) :TeamsListViewState()
-        data class Error(val exception: Throwable) :TeamsListViewState()
+        data class TeamsLoaded(val teams: List<Team>) : TeamsListViewState()
+        data class Error(val exception: Throwable) : TeamsListViewState()
         object TeamsLoading : TeamsListViewState()
     }
 }
