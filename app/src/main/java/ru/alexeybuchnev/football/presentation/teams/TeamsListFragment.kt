@@ -12,18 +12,31 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import ru.alexeybuchnev.football.R
+import ru.alexeybuchnev.football.di.FootballApplication
 import ru.alexeybuchnev.football.domain.entity.Team
+import ru.alexeybuchnev.football.presentation.ViewModelFactory
+import javax.inject.Inject
 
 class TeamsListFragment : Fragment(R.layout.fragment_teams_list) {
 
+    private val component by lazy {
+        (requireActivity().application as FootballApplication).component
+    }
+
     private lateinit var teamsRecyclerView: RecyclerView
     private lateinit var progressBar: ProgressBar
-    private lateinit var teamsViewModel: TeamListViewModel
     private lateinit var swipeRefresh: SwipeRefreshLayout
-
     private var teamClickListener: TeamListItemClickListener? = null
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val teamsViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[TeamListViewModel::class.java]
+    }
+
     override fun onAttach(context: Context) {
+        component.inject(this)
         super.onAttach(context)
 
         if (context is TeamListItemClickListener) {
@@ -47,8 +60,6 @@ class TeamsListFragment : Fragment(R.layout.fragment_teams_list) {
         swipeRefresh.setOnRefreshListener {
             refresh()
         }
-
-        teamsViewModel = ViewModelProvider(this)[TeamListViewModel::class.java]
 
         teamsViewModel.teamsViewStateLiveData.observe(this.viewLifecycleOwner) { state ->
             when (state) {

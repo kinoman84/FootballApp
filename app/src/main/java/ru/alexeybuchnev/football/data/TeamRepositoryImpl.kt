@@ -3,18 +3,16 @@ package ru.alexeybuchnev.football.data
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import ru.alexeybuchnev.football.data.local.LocalDataSource
-import ru.alexeybuchnev.football.data.local.LocalDataSourceImpl
 import ru.alexeybuchnev.football.data.remote.RemoteDataSource
-import ru.alexeybuchnev.football.data.remote.retrofit.RetrofitDataSourceImpl
 import ru.alexeybuchnev.football.domain.entity.Player
 import ru.alexeybuchnev.football.domain.entity.Team
 import ru.alexeybuchnev.football.domain.repository.TeamRepository
-import java.lang.IllegalArgumentException
+import javax.inject.Inject
 
-class TeamRepositoryImpl private constructor() : TeamRepository {
-
-    private val remoteDataSource: RemoteDataSource = RetrofitDataSourceImpl()
-    private val localDataSource: LocalDataSource = LocalDataSourceImpl.get()
+class TeamRepositoryImpl @Inject constructor(
+    private val remoteDataSource: RemoteDataSource,
+    private val localDataSource: LocalDataSource
+) : TeamRepository {
 
     override fun getTeams(): LiveData<List<Team>> {
         return Transformations.map(localDataSource.getTeams()) { listTeamDbModel ->
@@ -53,19 +51,5 @@ class TeamRepositoryImpl private constructor() : TeamRepository {
                 TeamMapper.teamItemDtoToVenueDbModel(it)
             }
         )
-    }
-
-    companion object {
-        private var instance: TeamRepository? = null
-
-        fun initialize() {
-            if (instance == null) {
-                instance = TeamRepositoryImpl()
-            }
-        }
-
-        fun get(): TeamRepository {
-            return instance ?: throw IllegalArgumentException("TeamRepository must be initialized")
-        }
     }
 }

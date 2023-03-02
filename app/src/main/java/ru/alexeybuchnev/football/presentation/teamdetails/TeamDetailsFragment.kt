@@ -13,16 +13,30 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import coil.load
 import ru.alexeybuchnev.football.R
+import ru.alexeybuchnev.football.di.FootballApplication
 import ru.alexeybuchnev.football.domain.entity.Team
+import ru.alexeybuchnev.football.presentation.ViewModelFactory
 import java.lang.IllegalArgumentException
+import javax.inject.Inject
 
 class TeamDetailsFragment : Fragment(R.layout.fragment_team_details) {
 
+    @Inject
+    lateinit var viewModelFactory: ViewModelFactory
+
+    private val component by lazy {
+        (requireActivity().application as FootballApplication).component
+    }
+
+    private val teamDetailsViewModel by lazy {
+        ViewModelProvider(this, viewModelFactory)[TeamDetailsViewModel::class.java]
+    }
+
     private var selectedTeamId: Int? = null
     private var playerButtonCallback: PlayerButtonCallback? = null
-    private lateinit var teamDetailsViewModel: TeamDetailsViewModel
 
     override fun onAttach(context: Context) {
+        component.inject(this)
         super.onAttach(context)
 
         if (context is PlayerButtonCallback) {
@@ -40,8 +54,6 @@ class TeamDetailsFragment : Fragment(R.layout.fragment_team_details) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        teamDetailsViewModel = ViewModelProvider(this)[TeamDetailsViewModel::class.java]
 
         selectedTeamId?.let {
             teamDetailsViewModel.getTeamDetails(it).observe(this.viewLifecycleOwner) {
@@ -107,8 +119,6 @@ class TeamDetailsFragment : Fragment(R.layout.fragment_team_details) {
         }
 
         (activity as? AppCompatActivity)?.supportActionBar?.title = team.name
-
-
     }
 
     override fun onDetach() {
@@ -131,5 +141,4 @@ class TeamDetailsFragment : Fragment(R.layout.fragment_team_details) {
             }
         }
     }
-
 }
