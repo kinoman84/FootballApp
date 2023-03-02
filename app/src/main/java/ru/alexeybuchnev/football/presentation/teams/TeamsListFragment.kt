@@ -61,8 +61,6 @@ class TeamsListFragment : Fragment(R.layout.fragment_teams_list) {
             refresh()
         }
 
-
-
         teamsViewModel.teamsViewStateLiveData.observe(this.viewLifecycleOwner) { state ->
             when (state) {
                 is TeamListViewModel.TeamsListViewState.TeamsLoaded -> {

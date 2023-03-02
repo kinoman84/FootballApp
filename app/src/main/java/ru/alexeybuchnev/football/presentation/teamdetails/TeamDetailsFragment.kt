@@ -35,8 +35,6 @@ class TeamDetailsFragment : Fragment(R.layout.fragment_team_details) {
     private var selectedTeamId: Int? = null
     private var playerButtonCallback: PlayerButtonCallback? = null
 
-
-
     override fun onAttach(context: Context) {
         component.inject(this)
         super.onAttach(context)
@@ -121,8 +119,6 @@ class TeamDetailsFragment : Fragment(R.layout.fragment_team_details) {
         }
 
         (activity as? AppCompatActivity)?.supportActionBar?.title = team.name
-
-
     }
 
     override fun onDetach() {
@@ -145,5 +141,4 @@ class TeamDetailsFragment : Fragment(R.layout.fragment_team_details) {
             }
         }
     }
-
 }

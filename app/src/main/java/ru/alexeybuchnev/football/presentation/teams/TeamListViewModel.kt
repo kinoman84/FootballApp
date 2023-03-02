@@ -35,7 +35,6 @@ class TeamListViewModel @Inject constructor(
         teamsViewStateLiveData.addSource(teamListLiveData) { teamsViewStateLiveData.value = it }
     }
 
-
     fun refreshData() {
         mutableLoadingStateLiveData.value = TeamsListViewState.TeamsLoading
         viewModelScope.launch(exceptionHandler) {
