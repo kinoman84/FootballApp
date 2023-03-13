@@ -74,7 +74,7 @@ class PlayersListFragment : Fragment(R.layout.fragment_players_list) {
     }
 
     private fun updateUi(players: List<Player>) {
-        (playersRecyclerView.adapter as PlayersListAdapter).setList(players)
+        (playersRecyclerView.adapter as PlayersListAdapter).submitList(players)
     }
 
     private fun setLoading(isLoading: Boolean) {

@@ -3,18 +3,11 @@ package ru.alexeybuchnev.football.presentation.palyerslist
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import ru.alexeybuchnev.football.R
 import ru.alexeybuchnev.football.domain.entity.Player
 
-class PlayersListAdapter : RecyclerView.Adapter<PlayersListViewHolder>() {
-
-    private var players: List<Player> = listOf()
-
-    fun setList(list: List<Player>) {
-        players = list
-        notifyDataSetChanged()
-    }
+class PlayersListAdapter : ListAdapter<Player, PlayersListViewHolder>(PlayerItemDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PlayersListViewHolder {
         val view: View =
@@ -24,11 +17,8 @@ class PlayersListAdapter : RecyclerView.Adapter<PlayersListViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: PlayersListViewHolder, position: Int) {
-        val player = players[position]
+        val player = getItem(position)
         holder.bind(player)
     }
 
-    override fun getItemCount(): Int {
-        return players.size
-    }
 }

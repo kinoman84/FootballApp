@@ -1,7 +1,6 @@
 package ru.alexeybuchnev.football.data.local
 
 import androidx.lifecycle.LiveData
-import ru.alexeybuchnev.football.data.local.room.dao.VenueDao
 import ru.alexeybuchnev.football.data.local.room.model.TeamDbModel
 import ru.alexeybuchnev.football.data.local.room.model.TeamWithVenueDbModel
 import ru.alexeybuchnev.football.data.local.room.model.VenueDbModel
