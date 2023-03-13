@@ -3,18 +3,20 @@ package ru.alexeybuchnev.football.presentation.teams
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import ru.alexeybuchnev.football.R
 import ru.alexeybuchnev.football.domain.entity.Team
 
 class TeamsListAdapter(private val onTeamClick: (teamId: Int) -> Unit) :
     RecyclerView.Adapter<TeamsListItemViewHolder>() {
-    private var teamList: List<Team> = listOf()
-
-    fun setList(list: List<Team>) {
-        teamList = list
-        notifyDataSetChanged()
-    }
+    var teamList: List<Team> = listOf()
+        set(value) {
+            val callback = TeamListDiffCallback(teamList, value)
+            val diffResult = DiffUtil.calculateDiff(callback)
+            diffResult.dispatchUpdatesTo(this)
+            field = value
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TeamsListItemViewHolder {
         val view: View =

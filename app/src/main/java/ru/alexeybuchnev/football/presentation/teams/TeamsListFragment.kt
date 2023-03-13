@@ -89,7 +89,7 @@ class TeamsListFragment : Fragment(R.layout.fragment_teams_list) {
     }
 
     private fun bindData(teams: List<Team>) {
-        (teamsRecyclerView.adapter as TeamsListAdapter).setList(teams)
+        (teamsRecyclerView.adapter as TeamsListAdapter).teamList = teams
     }
 
     private fun setLoading(isLoading: Boolean) {
