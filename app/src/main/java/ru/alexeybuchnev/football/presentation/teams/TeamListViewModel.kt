@@ -21,6 +21,8 @@ class TeamListViewModel @Inject constructor(
         TeamsListViewState.TeamsLoaded(it)
     }
 
+    private var isFirstLoading = true
+
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         mutableLoadingStateLiveData.value = TeamsListViewState.Error(throwable)
     }
@@ -33,6 +35,13 @@ class TeamListViewModel @Inject constructor(
     init {
         teamsViewStateLiveData.addSource(loadingStateLiveData) { teamsViewStateLiveData.value = it }
         teamsViewStateLiveData.addSource(teamListLiveData) { teamsViewStateLiveData.value = it }
+    }
+
+    fun loadData() {
+        if (isFirstLoading) {
+            refreshData()
+            isFirstLoading = false
+        }
     }
 
     fun refreshData() {
